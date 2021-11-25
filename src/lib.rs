@@ -50,4 +50,8 @@ fn basic_test() {
     let w = wm.get_weight("a".to_string());
     assert_eq!(w, Some(&0));
 
+    wm.add_weight("a".to_string(), 3);
+    let w = wm.get_weight("a".to_string());
+    assert_eq!(w, Some(&3));
+
 }

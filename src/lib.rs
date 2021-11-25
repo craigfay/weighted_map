@@ -28,9 +28,7 @@ impl<K: Key, V> WeightedMap<K, V> {
     }
 
     pub fn add_weight(&mut self, key: K, weight: u32) {
-        let rc_key = Rc::new(key);
-
-        match self.key_to_weight.get_mut(&rc_key) {
+        match self.key_to_weight.get_mut(&Rc::new(key)) {
             Some(old_weight) => *old_weight = old_weight.saturating_add(weight),
             None => (),
         };

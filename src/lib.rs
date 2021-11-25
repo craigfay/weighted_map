@@ -27,6 +27,10 @@ impl<K: Key, V> WeightedMap<K, V> {
         self.key_to_weight.insert(Rc::clone(&rc_key), 0);
     }
 
+    pub fn get_value(&mut self, key: K) -> Option<&V> {
+        self.key_to_value.get(&Rc::new(key))
+    }
+
     pub fn add_weight(&mut self, key: K, weight: u32) {
         match self.key_to_weight.get_mut(&Rc::new(key)) {
             Some(w) => *w = w.saturating_add(weight),
@@ -54,6 +58,9 @@ fn basic_test() {
 
     let w = wm.get_weight("a".to_string());
     assert_eq!(w, Some(&0));
+
+    let v = wm.get_value("a".to_string());
+    assert_eq!(v, Some(&"b".to_string()));
 
     wm.add_weight("a".to_string(), 3);
     let w = wm.get_weight("a".to_string());

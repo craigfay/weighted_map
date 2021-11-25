@@ -26,6 +26,15 @@ impl<K: Key, V> WeightedMap<K, V> {
         self.key_to_value.insert(Rc::clone(&rc_key), value);
         self.key_to_weight.insert(Rc::clone(&rc_key), 0);
     }
+
+    pub fn add_weight(&mut self, key: K, weight: u32) {
+        let rc_key = Rc::new(key);
+
+        match self.key_to_weight.get_mut(&rc_key) {
+            Some(old_weight) => *old_weight = old_weight.saturating_add(weight),
+            None => (),
+        };
+    }
 }
 
 #[test]

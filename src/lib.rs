@@ -8,12 +8,12 @@ use std::rc::Rc;
 pub trait Key: Eq + Hash + Clone {}
 impl Key for String {}
 
-struct WeightedMap<K: Key> {
-    key_to_value: HashMap<Rc<K>, ()>,
+struct WeightedMap<K: Key, V> {
+    key_to_value: HashMap<Rc<K>, V>,
     key_to_weight: HashMap<Rc<K>, ()>,
 }
 
-impl<K: Key> WeightedMap<K> {
+impl<K: Key, V> WeightedMap<K, V> {
     pub fn new() -> Self {
         Self {
             key_to_value: HashMap::new(),
@@ -21,9 +21,9 @@ impl<K: Key> WeightedMap<K> {
         }
     }
 
-    pub fn insert(&mut self, key: K) {
+    pub fn insert(&mut self, key: K, value: V) {
         let rc_key = Rc::new(key);
-        self.key_to_value.insert(Rc::clone(&rc_key), ());
+        self.key_to_value.insert(Rc::clone(&rc_key), value);
         self.key_to_weight.insert(Rc::clone(&rc_key), ());
     }
 }
@@ -31,5 +31,5 @@ impl<K: Key> WeightedMap<K> {
 #[test]
 fn basic_test() {
     let mut wm = WeightedMap::new();
-    wm.insert("a".to_string());
+    wm.insert("a".to_string(), "b".to_string());
 }

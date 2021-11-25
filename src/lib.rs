@@ -35,10 +35,19 @@ impl<K: Key, V> WeightedMap<K, V> {
             None => (),
         };
     }
+
+    pub fn get_weight(&mut self, key: K) -> Option<&u32> {
+        let rc_key = Rc::new(key);
+        self.key_to_weight.get(&rc_key)
+    }
 }
 
 #[test]
 fn basic_test() {
     let mut wm = WeightedMap::new();
     wm.insert("a".to_string(), "b".to_string());
+
+    let w = wm.get_weight("a".to_string());
+    assert_eq!(w, Some(&0));
+
 }

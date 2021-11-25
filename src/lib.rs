@@ -10,7 +10,7 @@ impl Key for String {}
 
 struct WeightedMap<K: Key, V> {
     key_to_value: HashMap<Rc<K>, V>,
-    key_to_weight: HashMap<Rc<K>, ()>,
+    key_to_weight: HashMap<Rc<K>, u32>,
 }
 
 impl<K: Key, V> WeightedMap<K, V> {
@@ -24,7 +24,7 @@ impl<K: Key, V> WeightedMap<K, V> {
     pub fn insert(&mut self, key: K, value: V) {
         let rc_key = Rc::new(key);
         self.key_to_value.insert(Rc::clone(&rc_key), value);
-        self.key_to_weight.insert(Rc::clone(&rc_key), ());
+        self.key_to_weight.insert(Rc::clone(&rc_key), 0);
     }
 }
 

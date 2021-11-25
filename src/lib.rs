@@ -1,4 +1,4 @@
-use std::collections::{HashSet, HashMap};
+use std::collections::{HashMap};
 use std::hash::Hash;
 use std::rc::Rc;
 
@@ -8,7 +8,7 @@ use std::rc::Rc;
 pub trait Key: Eq + Hash + Clone {}
 impl Key for String {}
 
-struct WeightedMap<K: Key, V> {
+pub struct WeightedMap<K: Key, V> {
     key_to_value: HashMap<Rc<K>, V>,
     key_to_weight: HashMap<Rc<K>, u32>,
 }

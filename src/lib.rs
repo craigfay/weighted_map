@@ -46,8 +46,7 @@ impl<K: Key, V> WeightedMap<K, V> {
     }
 
     pub fn get_weight(&mut self, key: K) -> Option<&u32> {
-        let rc_key = Rc::new(key);
-        self.key_to_weight.get(&rc_key)
+        self.key_to_weight.get(&Rc::new(key))
     }
 }
 

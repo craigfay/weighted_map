@@ -29,7 +29,14 @@ impl<K: Key, V> WeightedMap<K, V> {
 
     pub fn add_weight(&mut self, key: K, weight: u32) {
         match self.key_to_weight.get_mut(&Rc::new(key)) {
-            Some(old_weight) => *old_weight = old_weight.saturating_add(weight),
+            Some(w) => *w = w.saturating_add(weight),
+            None => (),
+        };
+    }
+
+    pub fn subtract_weight(&mut self, key: K, weight: u32) {
+        match self.key_to_weight.get_mut(&Rc::new(key)) {
+            Some(w) => *w = w.saturating_sub(weight),
             None => (),
         };
     }
@@ -52,4 +59,7 @@ fn basic_test() {
     let w = wm.get_weight("a".to_string());
     assert_eq!(w, Some(&3));
 
+    wm.subtract_weight("a".to_string(), 1);
+    let w = wm.get_weight("a".to_string());
+    assert_eq!(w, Some(&2));
 }

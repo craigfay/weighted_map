@@ -1,4 +1,4 @@
-use std::collections::{HashMap, BTreeMap};
+use std::collections::{HashMap, BTreeMap, HashSet};
 use std::hash::Hash;
 use std::rc::Rc;
 
@@ -11,7 +11,7 @@ impl Key for String {}
 pub struct WeightedMap<K: Key, V> {
     key_to_value: HashMap<Rc<K>, V>,
     key_to_weight: HashMap<Rc<K>, u32>,
-    weight_to_key: BTreeMap<Rc<K>, u32>,
+    weight_to_key: BTreeMap<u32, HashSet<Rc<K>>>,
 }
 
 impl<K: Key, V> WeightedMap<K, V> {

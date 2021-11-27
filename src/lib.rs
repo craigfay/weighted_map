@@ -27,6 +27,12 @@ impl<K: Key, V> WeightedMap<K, V> {
         let rc_key = Rc::new(key);
         self.key_to_value.insert(Rc::clone(&rc_key), value);
         self.key_to_weight.insert(Rc::clone(&rc_key), 0);
+
+        let keys_with_same_weight = self.weight_to_key
+            .entry(0)
+            .or_insert(HashSet::new());
+
+        keys_with_same_weight.insert(Rc::clone(&rc_key));
     }
 
     pub fn get_value(&mut self, key: K) -> Option<&V> {
@@ -50,6 +56,10 @@ impl<K: Key, V> WeightedMap<K, V> {
     pub fn get_weight(&mut self, key: K) -> Option<&u32> {
         self.key_to_weight.get(&Rc::new(key))
     }
+
+    pub fn keys_with_weight(&self, weight: u32) -> Option<&HashSet<Rc<K>>> {
+        self.weight_to_key.get(&weight)
+    }
 }
 
 #[test]
@@ -70,4 +80,7 @@ fn basic_test() {
     wm.subtract_weight("a".to_string(), 1);
     let w = wm.get_weight("a".to_string());
     assert_eq!(w, Some(&2));
+
+    let keys = wm.keys_with_weight(0).unwrap();
+    assert_eq!(keys.len(), 1);
 }
